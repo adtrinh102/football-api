@@ -14,19 +14,19 @@ router.get('/player', (req, res, next) => {
 
 router.post('/player', (req, res, next) => {
     // Filter only if request has keys    
-    // const filters = []
+    const filters = []
     
-    // function addFilter (key) {
-    //     if (req.body[key]) {
-    //         filters.push({ [key]: req.body[key] })
-    //     }
-    // }
-    // addFilter('name')
-    // addFilter('number')
+    function addFilter (key) {
+        if (req.body[key]) {
+            filters.push({ [key]: req.body[key] })
+        }
+    }
+    addFilter('name')
+    addFilter('number')
     
-    // Another way to check
-    const keys = Object.keys(req.body)
-    const filters = keys.map(key => (({ [key]: req.body[key] })))
+    // Another way to check, but this way checks all input keys
+    // const keys = Object.keys(req.body)
+    // const filters = keys.map(key => (({ [key]: req.body[key] })))
 
     Player.findOne({
         where: {
