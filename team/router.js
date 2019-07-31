@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const Sequelize = require('sequelize')
 const Team = require('./model')
 const City = require('../city/model')
 
@@ -11,8 +12,20 @@ router.get('/team', (req, res, next) => {
 })
 
 router.post('/team', (req, res, next) => {
-    Team.create(req.body)
-        .then(team => res.json(team))
+    Team.findOne({
+        where: {
+            name: req.body.name
+        }
+    })
+        .then(team => {
+            if (team) {
+                res.status(403).send("Team's name has already been defined.")
+            }
+            else {
+                Team.create(req.body)
+                    .then(team => res.json(team))
+            }
+        })
         .catch(next)
 })
 

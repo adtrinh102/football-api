@@ -10,8 +10,20 @@ router.get('/city', (req, res, next) => {
 })
 
 router.post('/city', (req, res, next) => {
-    City.create(req.body)
-        .then(city => res.json(city))
+    City.findOne({
+        where: {
+            name: req.body.name
+        }
+    })
+        .then(city => {
+            if (city) {
+                res.status(403).send("City's name has already been defined.")
+            }
+            else {
+                City.create(req.body)
+                    .then(city => res.json(city))
+            }
+        })
         .catch(next)
 })
 

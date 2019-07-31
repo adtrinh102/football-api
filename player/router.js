@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const Sequelize = require('sequelize')
 const Player = require('./model')
 const Team = require('../team/model')
 const City = require('../city/model')
@@ -12,14 +13,51 @@ router.get('/player', (req, res, next) => {
 })
 
 router.post('/player', (req, res, next) => {
-    Player.create(req.body)
-        .then(player => res.json(player))
+    // Filter only if request has keys    
+    // const filters = []
+    
+    // function addFilter (key) {
+    //     if (req.body[key]) {
+    //         filters.push({ [key]: req.body[key] })
+    //     }
+    // }
+    // addFilter('name')
+    // addFilter('number')
+    
+    // Another way to check
+    const keys = Object.keys(req.body)
+    const filters = keys.map(key => (({ [key]: req.body[key] })))
+
+    Player.findOne({
+        where: {
+            [Sequelize.Op.or]: filters
+        }
+    })
+        .then(player => {
+            if (player) {
+                res.status(403).send("Player's name or player's number has already been defined.")
+            }
+            else {
+                Player.create(req.body)
+                    .then(player => res.json(player))
+            }
+        })
         .catch(next)
 })
 
 router.get('/player/:id', (req, res, next) => {
     Player.findByPk(req.params.id, { include: [Team, City] })
         .then(player => res.json(player))
+        .catch(next)
+})
+
+router.get('/player/team/:teamId', (req, res, next) => {
+    Player.findAll({
+        where: {
+            teamId: req.params.teamId
+        }
+    })
+        .then(players => res.json(players))
         .catch(next)
 })
 
