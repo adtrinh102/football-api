@@ -15,4 +15,46 @@ router.post('/team', (req, res, next) => {
         .catch(next)
 })
 
+router.get('/team/:id', (req, res, next) => {
+    Team.findByPk(req.params.id)
+        .then(team => {
+            if (!team) {
+                res.status(404).end()
+            }
+            else {
+                res.json(team)
+            }
+        })
+        .catch(next)
+})
+
+router.put('/team/:id', (req, res, next) => {
+    Team.findByPk(req.params.id)
+        .then(team => {
+            if (!team) {
+                res.status(404).end()
+            }
+            else {
+                team.update(req.body)
+                    .then(team => res.json(team))
+            }
+        })
+        .catch(next)
+})
+
+router.delete('/team/:id', (req, res, next) => {
+    Team.destroy({
+        where: {
+            id: req.params.id
+        }
+    })
+        .then(numDeleted => {
+            if (numDeleted) {
+                res.status(204).end()
+            }
+            return res.status(404).end()
+        })
+        .catch(next)
+})
+
 module.exports = router

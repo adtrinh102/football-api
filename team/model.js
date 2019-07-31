@@ -8,7 +8,7 @@ const Team = db.define(
             type: Sequelize.STRING
         }
     },
-    { tableName: 'teams' }
+    { tableName: 'teams', timestamps: false }
 )
 
 module.exports = Team
