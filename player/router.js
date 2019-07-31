@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const Player = require('./model')
 const Team = require('../team/model')
+const City = require('../city/model')
 
 const router = new Router()
 
@@ -17,7 +18,7 @@ router.post('/player', (req, res, next) => {
 })
 
 router.get('/player/:id', (req, res, next) => {
-    Player.findByPk(req.params.id, { include: [Team] })
+    Player.findByPk(req.params.id, { include: [Team, City] })
         .then(player => res.json(player))
         .catch(next)
 })
@@ -26,6 +27,19 @@ router.put('/player/:id', (req, res, next) => {
     Player.findByPk(req.params.id)
         .then(player => player.update(req.body))
         .then(player => res.json(player))
+        .catch(next)
+})
+
+router.delete('/player', (req, res, next) => {
+    Player.destroy({
+        where: {}
+    })
+        .then(numDeleted => {
+            if (numDeleted) {
+                res.status(204).end()
+            }
+            res.status(404).end()
+        })
         .catch(next)
 })
 

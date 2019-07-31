@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const Team = require('./model')
+const City = require('../city/model')
 
 const router = new Router()
 
@@ -16,7 +17,7 @@ router.post('/team', (req, res, next) => {
 })
 
 router.get('/team/:id', (req, res, next) => {
-    Team.findByPk(req.params.id)
+    Team.findByPk(req.params.id, { include: [City] })
         .then(team => {
             if (!team) {
                 res.status(404).end()
@@ -38,6 +39,19 @@ router.put('/team/:id', (req, res, next) => {
                 team.update(req.body)
                     .then(team => res.json(team))
             }
+        })
+        .catch(next)
+})
+
+router.delete('/team', (req, res, next) => {
+    Team.destroy({
+        where: {}
+    })
+        .then(numDeleted => {
+            if (numDeleted) {
+                res.status(204).end()
+            }
+            res.status(404).end()
         })
         .catch(next)
 })
