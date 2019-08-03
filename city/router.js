@@ -17,7 +17,7 @@ router.post('/city', (req, res, next) => {
     })
         .then(city => {
             if (city) {
-                res.status(403).send("City's name has already been defined.")
+                res.status(409).send("City's name has already been defined.")
             }
             else {
                 City.create(req.body)

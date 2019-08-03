@@ -35,7 +35,7 @@ router.post('/player', (req, res, next) => {
     })
         .then(player => {
             if (player) {
-                res.status(403).send("Player's name or player's number has already been defined.")
+                res.status(409).send("Player's name or player's number has already been defined.")
             }
             else {
                 Player.create(req.body)

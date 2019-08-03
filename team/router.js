@@ -19,7 +19,7 @@ router.post('/team', (req, res, next) => {
     })
         .then(team => {
             if (team) {
-                res.status(403).send("Team's name has already been defined.")
+                res.status(409).send("Team's name has already been defined.")
             }
             else {
                 Team.create(req.body)
