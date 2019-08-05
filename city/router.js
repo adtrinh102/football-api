@@ -17,7 +17,7 @@ router.post('/city', (req, res, next) => {
     })
         .then(city => {
             if (city) {
-                res.status(409).send("City's name has already been defined.")
+                return res.status(409).send("City's name has already been defined.")
             }
             else {
                 City.create(req.body)
@@ -46,9 +46,9 @@ router.delete('/city', (req, res, next) => {
     })
         .then(numDeleted => {
             if (numDeleted) {
-                res.status(204).end()
+                return res.status(204).end()
             }
-            res.status(404).end()
+            return res.status(404).end()
         })
         .catch(next)
 })
@@ -61,9 +61,9 @@ router.delete('/city/:id', (req, res, next) => {
     })
         .then(numDeleted => {
             if (numDeleted) {
-                res.status(204).end()
+                return res.status(204).end()
             }
-            res.status(404).end()
+            return res.status(404).end()
         })
         .catch(next)
 })

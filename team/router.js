@@ -19,7 +19,7 @@ router.post('/team', (req, res, next) => {
     })
         .then(team => {
             if (team) {
-                res.status(409).send("Team's name has already been defined.")
+                return res.status(409).send("Team's name has already been defined.")
             }
             else {
                 Team.create(req.body)
@@ -33,7 +33,7 @@ router.get('/team/:id', (req, res, next) => {
     Team.findByPk(req.params.id, { include: [City] })
         .then(team => {
             if (!team) {
-                res.status(404).end()
+                return res.status(404).end()
             }
             else {
                 res.json(team)
@@ -46,7 +46,7 @@ router.put('/team/:id', (req, res, next) => {
     Team.findByPk(req.params.id)
         .then(team => {
             if (!team) {
-                res.status(404).end()
+                return res.status(404).end()
             }
             else {
                 team.update(req.body)
@@ -62,9 +62,9 @@ router.delete('/team', (req, res, next) => {
     })
         .then(numDeleted => {
             if (numDeleted) {
-                res.status(204).end()
+                return res.status(204).end()
             }
-            res.status(404).end()
+            return res.status(404).end()
         })
         .catch(next)
 })
@@ -77,7 +77,7 @@ router.delete('/team/:id', (req, res, next) => {
     })
         .then(numDeleted => {
             if (numDeleted) {
-                res.status(204).end()
+                return res.status(204).end()
             }
             return res.status(404).end()
         })

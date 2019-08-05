@@ -35,7 +35,7 @@ router.post('/player', (req, res, next) => {
     })
         .then(player => {
             if (player) {
-                res.status(409).send("Player's name or player's number has already been defined.")
+                return res.status(409).send("Player's name or player's number has already been defined.")
             }
             else {
                 Player.create(req.body)
@@ -74,9 +74,9 @@ router.delete('/player', (req, res, next) => {
     })
         .then(numDeleted => {
             if (numDeleted) {
-                res.status(204).end()
+                return res.status(204).end()
             }
-            res.status(404).end()
+            return res.status(404).end()
         })
         .catch(next)
 })
@@ -89,9 +89,9 @@ router.delete('/player/:id', (req, res, next) => {
     })
         .then(numDeleted => {
             if (numDeleted) {
-                res.status(204).end()
+                return res.status(204).end()
             }
-            res.status(404).end()
+            return res.status(404).end()
         })
         .catch(next)
 })
